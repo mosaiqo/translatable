@@ -153,7 +153,29 @@ class TranslatableTest extends TestsBase
 
 		$defaultLanguage = app()->getLocale();
 
-		$this->assertEquals($article->title, $this->$defaultLanguage()->title);
+		$this->assertEquals($article->title, $article->$defaultLanguage()->title);
 	}
 
+	/**
+	 * @test
+	 */
+	public function it_returns_the_property_in_the_language_passed_by()
+	{
+		$article = Article::create( [
+			'en'          => [
+				'title' => 'My title'
+			],
+			'es'          => [
+				'title' => 'Mi titulo'
+			],
+			'ca'          => [
+				'title' => 'El meu títol'
+			],
+			'commentable' => true
+		] );
+
+		$this->assertEquals($article->translate('es')->title, 'Mi titulo');
+		$this->assertEquals($article->translate('ca')->title, 'El meu títol');
+		$this->assertEquals($article->translate('en')->slug, null);
+	}
 }

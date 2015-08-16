@@ -117,4 +117,12 @@ class Article extends Moloquent
 		parent::save($options);
 	}
 
+
+	public function translate($locale, $fallback = null)
+	{
+		$locale = $this->locale( $locale );
+		
+		return $locale;
+	}
+
 }
