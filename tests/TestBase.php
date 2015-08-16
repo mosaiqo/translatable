@@ -19,6 +19,11 @@ class TestsBase extends TestCase
 //		$this->countQueries();
 	}
 
+	public function tearDown()
+	{
+
+	}
+
 //	public function testRunningMigration()
 //	{
 ////		$country = Country::find( 1 );
