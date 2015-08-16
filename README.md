@@ -1,0 +1,2 @@
+Mosaiqo Translatable
+====================
