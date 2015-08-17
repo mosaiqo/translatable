@@ -10,4 +10,18 @@ class Locale extends Moloquent
 
 	protected $fillable = ['es', 'de', 'fr', 'ca', 'en'];
 
+
+	public function __call($method, $arguments)
+	{
+		if(in_array($method, $this->getFillable()))
+			return $this->embedsOne($this->getTranslationModel(), $method);
+
+		return parent::__call($method, $arguments);
+	}
+
+	private function getTranslationModel()
+	{
+		return $this->getParentRelation()->getParent()->getTranslationModelName();
+	}
+
 }

@@ -3,7 +3,6 @@
 use Illuminate\Database\Eloquent\MassAssignmentException;
 
 use Mosaiqo\Translatable\Exceptions\AttributeNotTranslatable;
-use Mosaiqo\Translatable\Exceptions\LocaleNotDefinedException;
 
 use Mosaiqo\Translatable\Translatable;
 
@@ -24,26 +23,24 @@ class Article extends Moloquent
 	protected $currentLocales = [];
 
 
-	public function locale($localeCode)
+	public function locales()
 	{
+		return $this->embedsOne(\Mosaiqo\Translatable\Models\Locale::class, 'locales');
+	}
 
-		if(isset($this->currentLocales[$localeCode]))
+	protected function locale($localeCode)
+	{
+		$localeTranslation = null;
+		if ($locales = $this->locales()->getResults() )
 		{
-			$localeTranslation =  $this->currentLocales[$localeCode];
+			$localeTranslation = $locales->$localeCode()->getResults();
 		}
 
-		if(isset($this->locales[$localeCode]))
+		if( !$locales || !$localeTranslation )
 		{
-			$localeTranslation = new \stdClass;
-			foreach($this->locales[$localeCode] as $key => $value)
-			{
-				$localeTranslation->$key = $value;
-			}
+			$localeTranslation = $this->createNewLocaleTranslation();
 		}
-		else
-		{
-			$localeTranslation = new \stdClass;
-		}
+
 
 		return $this->currentLocales[$localeCode] = $localeTranslation;
 	}
@@ -55,16 +52,10 @@ class Article extends Moloquent
 			if(in_array($locale, $this->availableLocales))
 			{
 				$localeTranslation = $this->locale($locale);
+				$newFillable = array_merge_recursive($localeTranslation->getFillable(),$this->translatableAttributes);
+				$localeTranslation->fillable($newFillable);
 
-				foreach($parameters as $attribute => $value)
-				{
-					if (!in_array($attribute, $this->getFillable()))
-					{
-						throw new MassAssignmentException;
-					}
-
-					$localeTranslation->$attribute = $value;
-				}
+				$localeTranslation->fill($parameters);
 
 				unset($attributes[$locale]);
 			}
@@ -102,27 +93,46 @@ class Article extends Moloquent
 
 	public function save(array $options = [])
 	{
+		if( $this->locales)
+			$localeTranslation = $this->locales()->getResults();
+		else
+			$localeTranslation = $this->locales()->create([]);
+
 		foreach($this->currentLocales as $locale => $currentLocale)
 		{
-			foreach(get_object_vars( $currentLocale ) as $key =>  $var)
+
+			foreach($currentLocale->getAttributes() as $key =>  $var)
 			{
 				if(!in_array($key, $this->translatableAttributes))
 					throw new AttributeNotTranslatable;
 			}
+
+			$localeTranslation->$locale()->associate($currentLocale);
 		}
 
-		$this->locales = $this->currentLocales;
+		$this->locales()->associate($localeTranslation);
 
+		$this->currentLocales = [];
+		return parent::save($options);
 
-		parent::save($options);
 	}
 
 
-	public function translate($locale, $fallback = null)
+	public function translate($locale)
 	{
 		$locale = $this->locale( $locale );
-		
+
 		return $locale;
+	}
+
+	private function createNewLocaleTranslation()
+	{
+		return app()->make( $this->translationModel );
+	}
+
+	public function getTranslationModelName()
+	{
+		return $this->translationModel;
 	}
 
 }
