@@ -19,6 +19,11 @@ class TestsBase extends TestCase
 //		$this->countQueries();
 	}
 
+	public function tearDown()
+	{
+
+	}
+
 //	public function testRunningMigration()
 //	{
 ////		$country = Country::find( 1 );
@@ -50,7 +55,7 @@ class TestsBase extends TestCase
 			]
 		]);
 
-		$app['config']->set( 'translatable.locales', [ 'el', 'en', 'fr', 'de', 'id' ] );
+		$app['config']->set( 'translatable.locales', [ 'es', 'en', 'fr', 'de', 'ca'] );
 	}
 
 	protected function getPackageAliases( $app )

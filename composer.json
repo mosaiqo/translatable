@@ -1,6 +1,6 @@
 {
     "name": "mosaiqo/translatable",
-    "description": "A Laravel package for easy implementation of multilingual models.",
+    "description": "A Laravel package for easy implementation of multilingual models in mongo.",
     "require": {
         "php": ">=5.4.0",
         "illuminate/support": "~5.0",
