@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/mosaiqo/translatable.png?label=ready&title=Ready)](https://waffle.io/mosaiqo/translatable)
 # Mosaiqo Translatable
 ----------------------------------------------
 
