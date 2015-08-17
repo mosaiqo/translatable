@@ -55,7 +55,7 @@ class TestsBase extends TestCase
 			]
 		]);
 
-		$app['config']->set( 'translatable.locales', [ 'el', 'en', 'fr', 'de', 'id' ] );
+		$app['config']->set( 'translatable.locales', [ 'es', 'en', 'fr', 'de', 'ca'] );
 	}
 
 	protected function getPackageAliases( $app )

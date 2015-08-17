@@ -19,6 +19,7 @@ class Locale extends Moloquent
 		return parent::__call($method, $arguments);
 	}
 
+
 	private function getTranslationModel()
 	{
 		return $this->getParentRelation()->getParent()->getTranslationModelName();

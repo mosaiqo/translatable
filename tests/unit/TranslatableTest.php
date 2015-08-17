@@ -103,6 +103,36 @@ class TranslatableTest extends TestsBase
 		$this->assertEquals($article->en()->title, 'My title');
 	}
 
+	/**
+	 * @test
+	 */
+	public function fills_the_translations_correctly()
+	{
+		$article = Article::create(['commentable' => 1]);
+		$article->en()->fill([
+				'title' => 'My title',
+				'slug' => 'my-title'
+		]);
+		$article->save();
+
+		$this->assertEquals($article->en()->title, 'My title');
+	}
+
+	/**
+	 * @test
+	 * @group develop
+	 */
+	public function creates_the_translations_correctly()
+	{
+		$article = Article::create(['commentable' => 1]);
+		$article->en([
+			'title' => 'My title',
+			'slug'  => 'my-title'
+		]);
+
+		$this->assertEquals($article->en()->title, 'My title');
+	}
+
 
 	/**
 	 * @test
@@ -183,6 +213,61 @@ class TranslatableTest extends TestsBase
 	/**
 	 * @test
 	 */
+
+	public function it_returns_if_has_translations()
+	{
+		Article::create( [
+			'en'          => [
+				'title' => 'My title'
+			],
+			'es'          => [
+				'title' => 'Mi titulo'
+			],
+			'ca'          => [
+				'title' => 'El meu títol'
+			],
+			'commentable' => true
+		] );
+
+		$article = Article::first();
+
+		$this->assertTrue( $article->hasTranslation());
+		$this->assertTrue( $article->hasTranslation('es'));
+		$this->assertFalse( $article->hasTranslation('fr'));
+		$this->assertTrue( $article->isTranslated('ca'));
+		$this->assertFalse( $article->isTranslated('jp'));
+	}
+
+
+	/**
+	 * @test
+	 *
+	 * @expectedException \Mosaiqo\Translatable\Exceptions\LocaleNotDefinedException
+	 */
+	public function it_can_return_fallback_if_not_exist()
+	{
+		$article = Article::create( [
+			'en'          => [
+				'title' => 'My title'
+			],
+			'es'          => [
+				'title' => 'Mi titulo'
+			],
+
+			'commentable' => true
+		]);
+
+
+		$this->assertEquals($article->translate('es')->title, 'Mi titulo');
+		$this->assertEquals($article->translate('ca', true)->title, 'My title');
+		$this->assertEquals($article->translateOrDefault('ca')->title, 'My title');
+		$this->assertEquals($article->translate('ca', 'es')->title, 'Mi titulo');
+		$this->assertEquals($article->translate('ca', 'xx')->title, 'Mi titulo');
+	}
+
+	/**
+	 * @test
+	 */
 	public function it_deletes_a_locale()
 	{
 		$article = Article::create([
@@ -251,4 +336,6 @@ class TranslatableTest extends TestsBase
 		$this->assertEquals($articles[3]->title, 'C');
 		$this->assertEquals($articles[4]->title, 'D');
 	}
+
+
 }
