@@ -1,5 +1,9 @@
 ## Version History
 
+
+### v. 0.0.7
+* Minor Bug fixes
+
 ### v. 0.0.6
 * Fixed bug with the saving event.
 
