@@ -21,7 +21,7 @@ class TestsBase extends TestCase
 
 	public function tearDown()
 	{
-
+		parent::tearDown();
 	}
 
 //	public function testRunningMigration()
