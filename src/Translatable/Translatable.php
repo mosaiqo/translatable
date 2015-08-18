@@ -150,12 +150,16 @@ trait Translatable
 		{
 			if($this->isTranslatable( $currentLocale ))
 			{
+				$currentLocale->fireModelEvent('saving');
 				$localeTranslation->$locale()->associate( $currentLocale );
 			}
 		}
 
+		$localeTranslation->fireModelEvent( 'saving' );
 		$this->locales()->associate( $localeTranslation );
+
 		$this->currentLocales = [];
+
 		return parent::save( $options );
 	}
 
