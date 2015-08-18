@@ -1,5 +1,8 @@
 ## Version History
 
-### v. 1.0
+### v. 0.0.5
+* Some improvements to the Locale Api, just new stuff no changes iin the current API.
+
+### v. 0.0.1
 * Initial version
 * Translatable is a class extending Eloquent
