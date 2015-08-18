@@ -31,7 +31,7 @@ Its a **Plug & Play package**, if you are using [Laravel MondoDB](https://github
 ##### Add this to your `config/app.php`
 
 ```php
- Mosaiqo\Translatable\TranslatableServiceProvider:class,
+ Mosaiqo\Translatable\TranslatableServiceProvider::class,
 ```
 
 ##### Publish the config:
@@ -197,7 +197,7 @@ $article->isTranslated('en');
 $article->isTranslated('ca');
 ```
 
-You can get the holw translations instance
+You can get the hole translations instance, it will return a collection of the ArticleLocale
 
 ```php
 $article->translations();
