@@ -1,5 +1,6 @@
 <?php namespace Mosaiqo\Translatable;
 
+use Illuminate\Database\Eloquent\Collection;
 use Mosaiqo\Translatable\Exceptions\AttributeNotTranslatable;
 use Mosaiqo\Translatable\Exceptions\LocaleNotDefinedException;
 
@@ -200,7 +201,7 @@ trait Translatable
 	 */
 	public function translations()
 	{
-		return $this->locales()->getResults();
+		return Collection::make( $this->locales()->getResults()->getTranslations() );
 	}
 
 	/**
