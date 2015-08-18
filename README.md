@@ -1,4 +1,4 @@
-[![Stories in Ready](https://badge.waffle.io/mosaiqo/translatable.png?label=ready&title=Ready)](https://waffle.io/mosaiqo/translatable)
+
 # Mosaiqo Translatable
 ----------------------------------------------
 
@@ -29,6 +29,24 @@ Its a **Plug & Play package**, if you are using [Laravel MondoDB](https://github
  composer require mosaiqo/translatable
 ```
 
+or put it in your composer.json file
+
+
+```json
+
+{
+...
+	'require' : {
+		...
+		"mosaiqo/translatable": "dev-master"
+	}
+...
+
+}
+```
+
+
+
 ##### Add this to your `config/app.php`
 
 ```php
@@ -42,7 +60,14 @@ You can change the values, if you like.
 ```shell
 php artisan vendor:publish --provider="Mosaiqo\Translatable\TranslatableServiceProvider" --tag="config"
 ```
+# Issues 
+----------------------------------------------
 
+[![Stories in Ready](https://badge.waffle.io/mosaiqo/translatable.png?label=ready&title=Ready)](https://waffle.io/mosaiqo/translatable) 
+
+We are still working on this package. It will be nice if you can get us some feedback.
+
+If you find some errors or have an idea feel free to [ open a new issue ](https://github.com/mosaiqo/translatable/issues/new).
 
 
 
