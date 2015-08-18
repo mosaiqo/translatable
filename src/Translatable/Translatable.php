@@ -177,7 +177,6 @@ trait Translatable
 	public function translate($locale , $withFallback = null)
 	{
 
-
 		if ( ! $this->hasTranslation( $locale ) )
 		{
 			if(is_string($withFallback))
@@ -192,7 +191,7 @@ trait Translatable
 
 			if(! in_array( $withFallback, $this->getAvailableLocales() ) )
 			{
-				throw new LocaleNotDefinedException;
+				throw new LocaleNotDefinedException($withFallback);
 			}
 
 		}
@@ -315,7 +314,7 @@ trait Translatable
 		{
 			if ( ! in_array( $key, $this->getTranslatableAttributes() ) )
 			{
-				throw new AttributeNotTranslatable;
+				throw new AttributeNotTranslatable($key);
 			}
 		}
 
