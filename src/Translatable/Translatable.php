@@ -55,13 +55,13 @@ trait Translatable
 		{
 			$localeTranslation = $locales->$localeCode()->getResults();
 
-			if( $localeTranslation == null)
+			if(! $this->hasTranslation( $localeCode ))
 			{
 				$localeTranslation = $this->createNewLocaleTranslation( $parameters );
 			}
 		}
 
-		if (!$locales || !$localeTranslation )
+		if (!$localeTranslation )
 		{
 			$localeTranslation = $this->createNewLocaleTranslation($parameters);
 
