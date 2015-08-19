@@ -59,5 +59,4 @@ class Locale extends Moloquent
 
 		return $translations;
 	}
-
 }

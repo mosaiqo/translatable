@@ -39,5 +39,4 @@ class LocaleTest extends TestsBase
 		$this->assertArrayNotHasKey('de', $article->locales->getTranslations());
 	}
 
-
 }

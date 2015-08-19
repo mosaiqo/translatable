@@ -271,26 +271,29 @@ class TranslatableTest extends TestsBase
 	 */
 	public function it_deletes_a_locale()
 	{
-//		$article = Article::create([
-//			'en'          => [
-//				'title' => 'My title'
-//			],
-//			'es'          => [
-//				'title' => 'To delete'
-//			],
-//			'ca'          => [
-//				'title' => 'El meu títol'
-//			],
-//			'commentable' => true
-//		] );
-//
-//
-//		$article->es()->delete();
-//		$article = Article::first();
-//		$this->assertEquals($article->es()->title, null);
-//
-//		$this->assertEquals($article->en()->title, 'My title');
-//		$this->assertEquals($article->ca()->title, 'El meu títol');
+		$article = Article::create([
+			'en'          => [
+				'title' => 'My title'
+			],
+			'es'          => [
+				'title' => 'To delete'
+			],
+			'ca'          => [
+				'title' => 'El meu títol'
+			],
+			'commentable' => true
+		] );
+
+		$removed = $article->remove('es');
+
+		$article = Article::first();
+
+
+		$this->assertEquals( $removed->title, 'To delete');
+
+		$this->assertEquals( $article->es()->title, NULL);
+		$this->assertEquals($article->en()->title, 'My title');
+		$this->assertEquals($article->ca()->title, 'El meu títol');
 	}
 
 	/**
