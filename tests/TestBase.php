@@ -55,6 +55,7 @@ class TestsBase extends TestCase
 			]
 		]);
 
+		$app['config']->set( 'translatable.custom_id', true );
 		$app['config']->set( 'translatable.locales', [ 'es', 'en', 'fr', 'de', 'ca'] );
 	}
 

@@ -26,10 +26,20 @@ return [
 	| Locale key
 	|--------------------------------------------------------------------------
 	|
-	| Defines the 'locale' field name, which is used to make the relation
+	| Defines the 'locales' field name, which is used to make the relation
 	| for the translation model.
 	|
 	*/
-	'locale_key' => 'locale',
+	'locale_key' => 'locales',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Custom ID
+	|--------------------------------------------------------------------------
+	|
+	| Enable to have a custom ID, instead the normal one it uses the localeCode
+	|
+	*/
+	'custom_id' => true,
 
 ];

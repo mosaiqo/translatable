@@ -54,22 +54,23 @@ trait Translatable
 		if ( $locales = $this->locales()->getResults() )
 		{
 			$localeTranslation = $locales->$localeCode()->getResults();
+
 		}
 
-		if ( ! $locales || ! $localeTranslation )
+		if (!$locales || !$localeTranslation )
 		{
 			$localeTranslation = $this->createNewLocaleTranslation($parameters);
 
 			if($this->exists)
 			{
 				$locale = $this->locales()->getResults();
-				$locale->$localeCode()->associate( $localeTranslation );
-				$this->locales()->associate( $locale );
+				$locale->$localeCode()->save( $localeTranslation );
+				$this->locales()->save( $locale );
 				$this->save();
 			}
 		}
 
-		return $this->currentLocales[ $localeCode ] = $localeTranslation;
+		return $this->currentLocales[$localeCode] = $localeTranslation;
 	}
 
 	/**
@@ -79,22 +80,13 @@ trait Translatable
 	 *
 	 * @return $this
 	 *
-	 * @throws \Illuminate\Database\Eloquent\MassAssignmentException
 	 */
 	public function fill( array $attributes )
 	{
-		foreach ( $attributes as $locale => $parameters )
-		{
-			if ( in_array( $locale, $this->getAvailableLocales() ) )
-			{
-				$localeTranslation = $this->locale($locale);
-				$newFillable       = array_merge_recursive( $localeTranslation->getFillable(), $this->getTranslatableAttributes() );
-				$localeTranslation->fillable( $newFillable );
-				$localeTranslation->fill( $parameters );
-				unset( $attributes[ $locale ] );
-			}
-		}
-		return parent::fill( $attributes );
+
+		$attributesForParent = $this->fillLocales( $attributes );
+
+		return parent::fill( $attributesForParent );
 	}
 
 	/**
@@ -150,8 +142,15 @@ trait Translatable
 		{
 			if($this->isTranslatable( $currentLocale ))
 			{
+
+				if($this->isCustomIdEnabled())
+				{
+					$keyname = $this->getKeyName();
+					$currentLocale->$keyname = $locale;
+				}
+
 				$currentLocale->fireModelEvent('saving');
-				$localeTranslation->$locale()->associate( $currentLocale );
+				$localeTranslation->$locale()->save( $currentLocale );
 			}
 		}
 
@@ -262,7 +261,7 @@ trait Translatable
 	 */
 	private function createNewLocaleTranslation($parameters = [])
 	{
-		return app()->make($this->getTranslationModelName(), $parameters );
+		return app($this->getTranslationModelName(), $parameters );
 	}
 
 	/**
@@ -310,7 +309,7 @@ trait Translatable
 	 */
 	protected function isTranslatable( $currentLocale )
 	{
-		foreach ( $currentLocale->getAttributes() as $key => $var )
+		foreach ( $currentLocale->getDirty() as $key => $var )
 		{
 			if ( ! in_array( $key, $this->getTranslatableAttributes() ) )
 			{
@@ -328,5 +327,64 @@ trait Translatable
 	protected function getFallbackLocale()
 	{
 		return config('app.fallback_locale', 'en');
+	}
+
+	/**
+	 * @return mixed
+	 */
+	protected function isCustomIdEnabled()
+	{
+		return config( 'translatable.custom_id', true);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	protected function localeKey()
+	{
+		return config( 'translatable.locale_key', 'locales');
+	}
+
+	/**
+	 * @param array $attributes
+	 *
+	 * @return bool
+	 */
+	protected function isLocalKeyInAttributes( array $attributes )
+	{
+		return array_key_exists( $this->localeKey(), $attributes );
+	}
+
+	/**
+	 * @param array $attributes
+	 *
+	 * @return mixed
+	 */
+	protected function fillLocales( array $attributes )
+	{
+
+		if ( $this->isLocalKeyInAttributes( $attributes ) )
+		{
+			$attributesForParent = $attributes;
+			unset( $attributesForParent[ $this->localeKey() ] );
+			$attributes = $attributes[ $this->localeKey() ];
+		}
+
+
+		foreach ( $attributes as $locale => $parameters )
+		{
+			if ( in_array( $locale, $this->getAvailableLocales() ) )
+			{
+				$localeTranslation = $this->locale( $locale );
+				$newFillable       = array_merge_recursive( $localeTranslation->getFillable(), $this->getTranslatableAttributes() );
+				$localeTranslation->fillable( $newFillable );
+				$localeTranslation->fill( $parameters );
+
+			}
+
+			$attributesForParent[ $locale ] = $parameters;
+		}
+
+		return $attributesForParent;
 	}
 }
