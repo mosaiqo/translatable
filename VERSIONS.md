@@ -1,5 +1,9 @@
 ## Version History
 
+### v. 0.0.11
+* Minor Bug fixes.
+* Bug fix with delete locales repaired `issue#6`
+
 ### v. 0.0.8
 * Minor Bug fixes.
 * Asign a `locales` array to the fill method is possible now.
