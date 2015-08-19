@@ -356,17 +356,33 @@ class TranslatableTest extends TestsBase
 	/**
 	 * @test
 	 * @group bug#3
+	 * @group bug#7
 	 * @group develop
 	 */
 	public function a_locales_array_can_be_passed_to_create_them()
 	{
+		$article = new Article( [
+			'otro'        => 'aki',
+			'en'          => [ 'title' => 'My title' ],
+			'commentable' => true
+		] );
+
+		$article->save();
+
+		$this->assertEquals( "My title", $article->en()->title );
+
 		$article = Article::create([
 			'locales' => [
 				'en' => ['title' => 'My title']
-			]
+			],
+			'commentable' => true
 		]);
-
 		$this->assertEquals("My title", $article->en()->title);
+
+
+
+
+
 	}
 
 
