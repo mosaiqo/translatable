@@ -382,8 +382,10 @@ trait Translatable
 				$localeTranslation->fill( $parameters );
 
 			}
-
-			$attributesForParent[ $locale ] = $parameters;
+			else
+			{
+				$attributesForParent[ $locale ] = $parameters;
+			}
 		}
 
 		return $attributesForParent;
