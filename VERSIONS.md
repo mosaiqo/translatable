@@ -1,5 +1,9 @@
 ## Version History
 
+### v. 0.0.8
+* Minor Bug fixes.
+* Asign a `locales` array to the fill method is possible now.
+* Now a custom `id` for the locale with the localeCode can be set.
 
 ### v. 0.0.7
 * Minor Bug fixes
