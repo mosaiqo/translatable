@@ -362,6 +362,7 @@ trait Translatable
 	 */
 	protected function fillLocales( array $attributes )
 	{
+		$attributesForParent =[];
 
 		if ( $this->isLocalKeyInAttributes( $attributes ) )
 		{
