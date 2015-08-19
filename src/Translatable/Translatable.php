@@ -55,6 +55,10 @@ trait Translatable
 		{
 			$localeTranslation = $locales->$localeCode()->getResults();
 
+			if( $localeTranslation == null)
+			{
+				$localeTranslation = $this->createNewLocaleTranslation( $parameters );
+			}
 		}
 
 		if (!$locales || !$localeTranslation )
@@ -343,6 +347,16 @@ trait Translatable
 	protected function localeKey()
 	{
 		return config( 'translatable.locale_key', 'locales');
+	}
+
+	public function remove($localeCode)
+	{
+		$translation = $this->translate( $localeCode );
+		$translation->delete();
+
+		unset( $this->currentLocales[$localeCode]);
+
+		return $translation;
 	}
 
 	/**
