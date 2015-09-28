@@ -300,6 +300,37 @@ class TranslatableTest extends TestsBase
 
 	/**
 	 * @test
+	 *
+	 * @group bug#8
+	 */
+	public function it_creates_a_locale_after_deleting()
+	{
+		$article = Article::create([
+			'en'          => [
+				'title' => 'My title'
+			],
+			'es'          => [
+				'title' => 'To delete'
+			],
+			'ca'          => [
+				'title' => 'El meu títol'
+			],
+			'commentable' => true
+		] );
+
+		$removed = $article->remove('es');
+
+		$article = Article::first();
+		$this->assertEquals( $removed->title, 'To delete');
+		$article->save();	
+
+		$this->assertEquals( $article->es()->title, "");
+		$this->assertEquals($article->en()->title, 'My title');
+		$this->assertEquals($article->ca()->title, 'El meu títol');
+	}
+
+	/**
+	 * @test
 	 */
 	public function it_finds_an_item_based_on_relationship()
 	{
