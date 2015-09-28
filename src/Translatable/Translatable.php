@@ -352,9 +352,14 @@ trait Translatable
 	public function remove($localeCode)
 	{
 		$translation = $this->translate( $localeCode );
-		$translation->delete();
-
-		unset( $this->currentLocales[$localeCode]);
+		
+		if ( $locales = $this->locales()->getResults() )
+		{
+			$localeTranslation = $locales->$localeCode()->getResults();
+			unset($this->locales->attributes['es']);
+			$this->locales()->associate( $this->locales );
+			$this->save();		
+		}	
 
 		return $translation;
 	}
