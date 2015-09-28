@@ -356,7 +356,7 @@ trait Translatable
 		if ( $locales = $this->locales()->getResults() )
 		{
 			$localeTranslation = $locales->$localeCode()->getResults();
-			unset($this->locales->attributes['es']);
+			unset($this->locales->attributes[$localeCode]);
 			$this->locales()->associate( $this->locales );
 			$this->save();		
 		}	
