@@ -157,7 +157,7 @@ trait Translatable
 				// This is placed here in favor to make async calls from the frontend.
 				if($localeTranslation->$locale)
 				{
-					$localeTranslation->$locale()->performUpdate($currentLocale);
+					$localeTranslation->$locale()->performUpdate($currentLocale, []);
 				}
 				else
 				{				
