@@ -154,7 +154,15 @@ trait Translatable
 				}
 
 				$currentLocale->fireModelEvent('saving');
-				$localeTranslation->$locale()->save( $currentLocale );
+				// This is placed here in favor to make async calls from the frontend.
+				if($localeTranslation->$locale)
+				{
+					$localeTranslation->$locale()->performUpdate($currentLocale);
+				}
+				else
+				{				
+					$localeTranslation->$locale()->save( $currentLocale );
+				}
 			}
 		}
 
