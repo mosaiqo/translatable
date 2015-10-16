@@ -141,7 +141,7 @@ trait Translatable
 		else
 			$localeTranslation = $this->locales()->create([]);
 
-
+		$update = false;
 		foreach ( $this->currentLocales as $locale => $currentLocale )
 		{
 			if($this->isTranslatable( $currentLocale ))
@@ -158,6 +158,7 @@ trait Translatable
 				if($localeTranslation->$locale)
 				{
 					$localeTranslation->$locale()->performUpdate($currentLocale, []);
+					$update = true;
 				}
 				else
 				{				
@@ -165,12 +166,14 @@ trait Translatable
 				}
 			}
 		}
-
+		
 		$localeTranslation->fireModelEvent( 'saving' );
 		$this->locales()->associate( $localeTranslation );
 
 		$this->currentLocales = [];
 
+		if($update) return $update;
+		
 		return parent::save( $options );
 	}
 
