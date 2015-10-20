@@ -158,6 +158,7 @@ trait Translatable
 				if($localeTranslation->$locale)
 				{
 					$localeTranslation->$locale()->performUpdate($currentLocale, []);
+					$currentLocale->save();
 					$update = true;
 				}
 				else
@@ -401,7 +402,6 @@ trait Translatable
 			$attributes = $attributes[ $this->localeKey() ];
 		}
 
-
 		foreach ( $attributes as $locale => $parameters )
 		{
 			if ( in_array( $locale, $this->getAvailableLocales() ) )
@@ -410,7 +410,7 @@ trait Translatable
 				$newFillable       = array_merge_recursive( $localeTranslation->getFillable(), $this->getTranslatableAttributes() );
 				$localeTranslation->fillable( $newFillable );
 				$localeTranslation->fill( $parameters );
-
+				// $localeTranslation->save();
 			}
 			else
 			{
